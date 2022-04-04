@@ -60,6 +60,12 @@ function createTable(items){
             nameCell = row.addText("Team")
             nameCell.widthWeight = 70
 //             nameCell.titleFont = headline()
+            
+            pointsCell = row.addText("Points")
+            pointsCell.widthWeight = 5
+            
+            nrrCell = row.addText("NRR")
+            nrrCell.widthWeight = 15
 
             table.addRow(row)
             for (const item of items) {
@@ -74,6 +80,11 @@ function createTable(items){
                 nameCell.widthWeight = 70  
 //                 nameCell.titleFont = body()
 
+                pointsCell = row.addText(item.Points)
+                pointsCell.widthWeight = 5
+            
+                nrrCell = row.addText(item.NetRunRate)
+                nrrCell.widthWeight = 15
                 table.addRow(row)
             }
         }
