@@ -51,41 +51,67 @@ function createTable(items){
         break
         case "large": {
             let row = new UITableRow()
+            row.isHeader = true
+            row.cellSpacing = 2
             // row.height = 60
             // row.cellSpacing = 10
 
-            nameCell = row.addText("")
-            nameCell.widthWeight = 10
+            imageCell = row.addText("")
+            imageCell.widthWeight = 10
+            imageCell.titleFont =  Font.semiboldSystemFont(14)
             
             nameCell = row.addText("Team")
-            nameCell.widthWeight = 70
-//             nameCell.titleFont = headline()
+            nameCell.widthWeight = 50
+            nameCell.titleFont = Font.semiboldSystemFont(14)
             
-            pointsCell = row.addText("Points")
-            pointsCell.widthWeight = 5
+            pointsCell = row.addText("Pts")
+            pointsCell.widthWeight = 7
+            pointsCell.titleFont = Font.semiboldSystemFont(14)  
+            pointsCell.rightAligned()
             
             nrrCell = row.addText("NRR")
             nrrCell.widthWeight = 15
+            nrrCell.titleFont = Font.semiboldSystemFont(14)  
+            nrrCell.rightAligned()
+            
+            formCell = row.addText("  Form")
+            formCell.widthWeight = 15
+            formCell.titleFont = Font.semiboldSystemFont(14)  
+            formCell.leftAligned()
 
             table.addRow(row)
             for (const item of items) {
                 let row = new UITableRow()
+                row.cellSpacing = 2
                 // row.height = 60
                 // row.cellSpacing = 10
 
                 imageCell = row.addImageAtURL(item.TeamLogo)
                 imageCell.widthWeight = 10
+                imageCell.titleFont = Font.regularSystemFont(12)
+         
                 
                 nameCell = row.addText(item.TeamName)
-                nameCell.widthWeight = 70  
-//                 nameCell.titleFont = body()
+                nameCell.widthWeight = 50
+                nameCell.titleFont = Font.regularSystemFont(12)
 
                 pointsCell = row.addText(item.Points)
-                pointsCell.widthWeight = 5
+                pointsCell.widthWeight = 7
+                pointsCell.titleFont = Font.regularSystemFont(12)  
+                pointsCell.rightAligned()
             
                 nrrCell = row.addText(item.NetRunRate)
                 nrrCell.widthWeight = 15
+                nrrCell.titleFont = Font.regularSystemFont(12)  
+                nrrCell.rightAligned()
+                
+                formCell = row.addText("  " + item.Performance)
+                formCell.widthWeight = 15
+                formCell.titleFont = Font.semiboldSystemFont(12)    
+                formCell.leftAligned()
+                
                 table.addRow(row)
+                
             }
         }
         break
