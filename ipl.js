@@ -26,6 +26,7 @@ if (config.runsInWidget) {
 //     let table = createTable(items)
 //     await QuickLook.present(table)
 } else {
+    config.widgetFamily = "large"
     let table = createTable(items)
     await QuickLook.present(table)
 }
@@ -54,10 +55,11 @@ function createTable(items){
             // row.cellSpacing = 10
 
             nameCell = row.addText("")
-            imageCell.widthWeight = 20
+            nameCell.widthWeight = 10
             
-            nameCell = row.addText(item.TeamName)
-            // nameCell.widthWeight = 80
+            nameCell = row.addText("Team")
+            nameCell.widthWeight = 70
+//             nameCell.titleFont = headline()
 
             table.addRow(row)
             for (const item of items) {
@@ -65,11 +67,12 @@ function createTable(items){
                 // row.height = 60
                 // row.cellSpacing = 10
 
-                imageCell = row.addImageAtUrl(item.TeamLogo)
-                imageCell.widthWeight = 20
+                imageCell = row.addImageAtURL(item.TeamLogo)
+                imageCell.widthWeight = 10
                 
                 nameCell = row.addText(item.TeamName)
-                // nameCell.widthWeight = 80
+                nameCell.widthWeight = 70  
+//                 nameCell.titleFont = body()
 
                 table.addRow(row)
             }
