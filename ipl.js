@@ -1,17 +1,15 @@
 var PARAM_WIDGET_TITLE = "IPL Points Table"
 var PARAM_LINK = "https://ipl-stats-sports-mechanic.s3.ap-south-1.amazonaws.com/ipl/feeds/stats/60-groupstandings.js"
-var PARAM_BG_IMAGE_NAME = "none"
-var PARAM_BG_IMAGE_BLUR = "true"
-var PARAM_BG_IMAGE_GRADIENT = "true"
-var PARAM_SHOW_NEWS_IMAGES = "true"
 
 // get data
 var items = await loadItems()
 
+//callback function
 function ongroupstandings(x){
     return x.points
 }
 
+// call api, execute callback and get data
 async function loadItems(){
     let req = new Request(PARAM_LINK)
     let json = await req.loadString()
@@ -19,19 +17,86 @@ async function loadItems(){
     return data    
 }
 
+// widget
 if (config.runsInWidget) {
     let widget = await createWidget(items)
-    Script.setWidget(widget)
+    Script.setWidget(widget)    
 // } else if (config.runsWithSiri){
 //     let table = createTable(items)
 //     await QuickLook.present(table)
-} else {
+} 
+else // anything else ex. Siri, shortcut, manual, preview, etc. 
+{
     config.widgetFamily = "large"
     let table = createTable(items)
     await QuickLook.present(table)
 }
 
 Script.complete()
+
+async function createWidget(items){
+    let sc = new Color("#19398a")
+    let ec = new Color("#18184a")
+    let gradC = new LinearGradient()
+    gradC.colors = [sc, ec]
+    gradC.locations = [0,1]
+
+    let w = new ListWidget()
+    w.backgroundGradient = gradC
+    w.centerAlignContent()
+    w.spacing = 2
+
+    let mainStack = w.addStack()
+    mainStack.layoutVertically()
+
+    // header row
+    let rowStack = mainStack.addStack()
+    rowStack.layoutHorizontally()
+
+    let colLogo = rowStack.addStack()   
+
+    let colName = rowStack.addStack()
+    let txtName = colName.addText("Team")
+    txtName.Font = Font.semiboldSystemFont(14)
+
+    let colPts = rowStack.addStack()
+    let txtPts = colName.addText("Pts")
+    txtPts.Font = Font.semiboldSystemFont(14)
+
+    let colNrr = rowStack.addStack()
+    let txtNrr = colName.addText("NRR")
+    txtNrr.Font = Font.semiboldSystemFont(14)
+
+    let colForm = rowStack.addStack()
+    let txtForm = colName.addText("Form")
+    txtForm.Font = Font.semiboldSystemFont(14)
+
+    for (item of items) {
+        let rowStack = mainStack.addStack()
+        rowStack.layoutHorizontally()
+
+        let colLogo = rowStack.addStack() 
+        let imgObj = Image.fromFile(item.TeamLogo)
+        let img = colLogo.addImage(imgObj)
+        
+        let colName = rowStack.addStack()
+        let txtName = colName.addText(item.TeamName)
+        txtName.Font = Font.semiboldSystemFont(14)
+
+        let colPts = rowStack.addStack()
+        let txtPts = colName.addText(item.Points)
+        txtPts.Font = Font.semiboldSystemFont(14)
+
+        let colNrr = rowStack.addStack()
+        let txtNrr = colName.addText(item.NetRunRate)
+        txtNrr.Font = Font.semiboldSystemFont(14)
+
+        let colForm = rowStack.addStack()
+        let txtForm = colName.addText(item.Performance)
+        txtForm.Font = Font.semiboldSystemFont(14)
+    }
+    return w
+}
 
 function createTable(items){
     const table = new UITable()
