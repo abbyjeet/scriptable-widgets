@@ -1,8 +1,28 @@
-var PARAM_WIDGET_TITLE = "IPL Points Table"
-var PARAM_LINK = "https://ipl-stats-sports-mechanic.s3.ap-south-1.amazonaws.com/ipl/feeds/stats/60-groupstandings.js"
+/*
+IPL Widget
+By: @abbyjeet
+On: 2022-04-05
+source: https://github.com/abbyjeet/scriptable-widgets
+based on: 
+The Golf Club Wdiget by @supermamon
+*/
 
-// get data
-var items = await loadItems()
+// preferences
+const FONT_SIZE = 12
+const EXCLUDE_HC = true
+const HEADER_COLOR = Color.red()
+const ROW_COLOR = Color.blue()
+const BACKGROUND_COLOR = Color.black()
+const url = 'https://ipl-stats-sports-mechanic.s3.ap-south-1.amazonaws.com/ipl/feeds/stats/60-groupstandings.js'
+
+const bgimage = "https://raw.githubusercontent.com/abbyjeet/scriptable-widgets/main/ipl.jpg"
+
+const sc = new Color("#19398a",0.95)
+const ec = new Color("#18184a",0.95)
+const gradC = new LinearGradient()
+    gradC.colors = [sc, ec]
+    gradC.locations = [0,1]
+
 
 //callback function
 function ongroupstandings(x){
@@ -11,175 +31,119 @@ function ongroupstandings(x){
 
 // call api, execute callback and get data
 async function loadItems(){
-    let req = new Request(PARAM_LINK)
+    let req = new Request(url)
     let json = await req.loadString()
     let data = eval("(function(){ return " + json + "}())")
     return data    
 }
 
-// widget
-if (config.runsInWidget) {
-    let widget = await createWidget(items)
-    Script.setWidget(widget)    
-// } else if (config.runsWithSiri){
-//     let table = createTable(items)
-//     await QuickLook.present(table)
-} 
-else // anything else ex. Siri, shortcut, manual, preview, etc. 
-{
-    config.widgetFamily = "large"
-    let table = createTable(items)
-    await QuickLook.present(table)
+
+
+const font = Font.regularSystemFont(FONT_SIZE) 
+
+// adjust only if preferred
+// const colWidths = [45,120,45,45,45,45]
+
+const colWidths = [25,172,25,40,40]
+
+const data = await loadItems()
+
+const headers = ["", "Team","Pts","NRR","Form"]
+
+const keys = ["TeamLogo", "TeamName","Points","NetRunRate","Performance"]
+
+const widgetFamily = config.widgetFamily ? config.widgetFamily : 'large'
+
+const widget = new ListWidget()// 
+// widget.backgroundColor = BACKGROUND_COLOR
+
+let imgBg = await new Request(bgimage).loadImage()
+widget.backgroundImage = imgBg
+widget.backgroundGradient = gradC
+// widget.setPadding(0,0,0,0)
+
+// add the headers
+const headerStack = widget.addStack()
+headerStack.layoutHorizontally()
+// headerStack.setPadding(0,0,0,0)
+
+let idx = -1
+for (header of headers) {
+  idx++
+  if (EXCLUDE_HC && idx==5) continue;
+  const headerText = header
+  const headerCell = headerStack.addStack()
+  headerCell.layoutHorizontally()
+//   headerCell.backgroundColor = HEADER_COLOR
+  headerCell.size = new Size(colWidths[idx],24)
+  
+//   headerCell.addSpacer(2)
+  const textElement = headerCell.addText(headerText)
+  textElement.font = Font.boldSystemFont(14)
+  
+  headerStack.addSpacer(1) // between cells
+  
+  headerCell.centerAlignContent()
+  
+  if(idx==1) headerCell.addSpacer()
 }
 
+widget.addSpacer(1)
+// add the data
+
+// limit the number of rows based on widget size
+
+const rows = data.slice(0, widgetFamily=='large'?10:5)
+
+for (const row of rows) {
+  const rowStack = widget.addStack()
+  rowStack.layoutHorizontally()
+  let idx = -1
+  for (const cell of keys) {
+    idx++
+    if (EXCLUDE_HC && idx==5) continue;
+    const cellText = row[cell]
+    
+    if(idx==0){ 
+       // logo
+      const dataCell = rowStack.addStack() 
+        dataCell.layoutHorizontally()
+//     dataCell.backgroundColor = Color.blue()
+    dataCell.size = new Size(colWidths[idx],24)
+        let imgObj = await new Request(cellText).loadImage()
+        let img = dataCell.addImage(imgObj)
+    } else {
+    
+    const dataCell = rowStack.addStack()
+    dataCell.layoutHorizontally()
+//     dataCell.backgroundColor = Color.blue()
+    dataCell.size = new Size(colWidths[idx],24)
+    
+    dataCell.addSpacer(1)
+    
+    let textElement = ""
+    if(idx==4){
+      let balls = cellText.replaceAll(",", "").replaceAll("W", "🟢").replaceAll("L", "🔴")
+      textElement=dataCell.addText(balls)
+      textElement.font = Font.regularSystemFont(7)
+}else{
+  textElement=dataCell.addText(cellText)
+  textElement.font = font
+}
+
+    
+    
+    dataCell.centerAlignContent()
+    
+    if(idx==1) dataCell.addSpacer()
+  }
+    
+    rowStack.addSpacer(1)  // between cells
+  } 
+  widget.addSpacer(1) // between rows
+}
+
+
+if (config.runsInApp) await widget[`present${widgetFamily.split('').map( (c,i)=>(i==0?c.toUpperCase():c)).join('')}`]()
+Script.setWidget(widget)
 Script.complete()
-
-async function createWidget(items){
-    let sc = new Color("#19398a")
-    let ec = new Color("#18184a")
-    let gradC = new LinearGradient()
-    gradC.colors = [sc, ec]
-    gradC.locations = [0,1]
-
-    let w = new ListWidget()
-    w.backgroundGradient = gradC
-    w.centerAlignContent()
-    w.spacing = 2
-
-    let mainStack = w.addStack()
-    mainStack.layoutVertically()
-
-    // header row
-    let rowStack = mainStack.addStack()
-    rowStack.layoutHorizontally()
-
-    let colLogo = rowStack.addStack()   
-
-    let colName = rowStack.addStack()
-    let txtName = colName.addText("Team")
-    txtName.Font = Font.semiboldSystemFont(14)
-
-    let colPts = rowStack.addStack()
-    let txtPts = colName.addText("Pts")
-    txtPts.Font = Font.semiboldSystemFont(14)
-
-    let colNrr = rowStack.addStack()
-    let txtNrr = colName.addText("NRR")
-    txtNrr.Font = Font.semiboldSystemFont(14)
-
-    let colForm = rowStack.addStack()
-    let txtForm = colName.addText("Form")
-    txtForm.Font = Font.semiboldSystemFont(14)
-
-    for (item of items) {
-        let rowStack = mainStack.addStack()
-        rowStack.layoutHorizontally()
-
-        let colLogo = rowStack.addStack() 
-        let imgObj = Image.fromFile(item.TeamLogo)
-        let img = colLogo.addImage(imgObj)
-        
-        let colName = rowStack.addStack()
-        let txtName = colName.addText(item.TeamName)
-        txtName.Font = Font.semiboldSystemFont(14)
-
-        let colPts = rowStack.addStack()
-        let txtPts = colName.addText(item.Points)
-        txtPts.Font = Font.semiboldSystemFont(14)
-
-        let colNrr = rowStack.addStack()
-        let txtNrr = colName.addText(item.NetRunRate)
-        txtNrr.Font = Font.semiboldSystemFont(14)
-
-        let colForm = rowStack.addStack()
-        let txtForm = colName.addText(item.Performance)
-        txtForm.Font = Font.semiboldSystemFont(14)
-    }
-    return w
-}
-
-function createTable(items){
-    const table = new UITable()
-
-    switch (config.widgetFamily) {
-        case "small": {
-            let row = new UITableRow()
-            nameCell = row.addText("Small Widget")
-            table.addRow(row)
-        }
-        break
-        case "medium": {
-            let row = new UITableRow()
-            nameCell = row.addText("Medium Widget")
-            table.addRow(row)
-        }
-        break
-        case "large": {
-            let row = new UITableRow()
-            row.isHeader = true
-            row.cellSpacing = 2
-            // row.height = 60
-            // row.cellSpacing = 10
-
-            imageCell = row.addText("")
-            imageCell.widthWeight = 10
-            imageCell.titleFont =  Font.semiboldSystemFont(14)
-            
-            nameCell = row.addText("Team")
-            nameCell.widthWeight = 50
-            nameCell.titleFont = Font.semiboldSystemFont(14)
-            
-            pointsCell = row.addText("Pts")
-            pointsCell.widthWeight = 7
-            pointsCell.titleFont = Font.semiboldSystemFont(14)  
-            pointsCell.rightAligned()
-            
-            nrrCell = row.addText("NRR")
-            nrrCell.widthWeight = 15
-            nrrCell.titleFont = Font.semiboldSystemFont(14)  
-            nrrCell.rightAligned()
-            
-            formCell = row.addText("  Form")
-            formCell.widthWeight = 15
-            formCell.titleFont = Font.semiboldSystemFont(14)  
-            formCell.leftAligned()
-
-            table.addRow(row)
-            for (const item of items) {
-                let row = new UITableRow()
-                row.cellSpacing = 2
-                // row.height = 60
-                // row.cellSpacing = 10
-
-                imageCell = row.addImageAtURL(item.TeamLogo)
-                imageCell.widthWeight = 10
-                imageCell.titleFont = Font.regularSystemFont(12)
-         
-                
-                nameCell = row.addText(item.TeamName)
-                nameCell.widthWeight = 50
-                nameCell.titleFont = Font.regularSystemFont(12)
-
-                pointsCell = row.addText(item.Points)
-                pointsCell.widthWeight = 7
-                pointsCell.titleFont = Font.regularSystemFont(12)  
-                pointsCell.rightAligned()
-            
-                nrrCell = row.addText(item.NetRunRate)
-                nrrCell.widthWeight = 15
-                nrrCell.titleFont = Font.regularSystemFont(12)  
-                nrrCell.rightAligned()
-                
-                formCell = row.addText("  " + item.Performance)
-                formCell.widthWeight = 15
-                formCell.titleFont = Font.semiboldSystemFont(12)    
-                formCell.leftAligned()
-                
-                table.addRow(row)
-                
-            }
-        }
-        break
-    }
-    return table
-}
