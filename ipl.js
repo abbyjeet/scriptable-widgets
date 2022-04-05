@@ -15,7 +15,7 @@ const ROW_COLOR = Color.blue()
 const BACKGROUND_COLOR = Color.black()
 const url = 'https://ipl-stats-sports-mechanic.s3.ap-south-1.amazonaws.com/ipl/feeds/stats/60-groupstandings.js'
 
-const bgimage = "https://raw.githubusercontent.com/abbyjeet/scriptable-widgets/main/ipl.jpg"
+const bgimage = "https://raw.githubusercontent.com/abbyjeet/scriptable-widgets/main/ipl-new.jpg"
 
 const sc = new Color("#19398a",0.95)
 const ec = new Color("#18184a",0.95)
