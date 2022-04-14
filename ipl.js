@@ -53,16 +53,21 @@ function ongroupstandings(x){
     return x.points
 }
 
+function matchschedule(x){
+    return x.Matchsummary
+}
+
 // call api, execute callback and get data
-async function loadPointsTable(){
-    let req = new Request(pointstable)
+async function callbackFn(url){
+    let req = new Request(url)
     let json = await req.loadString()
     let data = eval("(function(){ return " + json + "}())")
     return data    
 }
 
-function pointsTableWidget(){
-    const pointsTable = await loadPointsTable()
+
+async function pointsTableWidget(){
+    const pointsTable = await callbackFn(pointstable)
 
     const rows = pointsTable.slice(0, widgetFamily=='large'?10:4)
 
@@ -147,32 +152,40 @@ function pointsTableWidget(){
     }   
 }
 
-function favouriteTeamWidget(){
+await function favouriteTeamWidget(){
     // add the text
     const textEl = widget.addText("Favourite")
 }
 
-function upcomingMatchWidget(){
+await function upcomingMatchWidget(){
+    const matches = await callbackFn(pointstable)
+    const upcoming = matches.filter(({MatchStatus}) => MatchStatus === 'UpComing');
+    
+    console.log(upcoming)
+    
     // add the text
     const textEl = widget.addText("Upcoming")
 }
 
-function lastMatchWidget(){
+await function lastMatchWidget(){
+    const matches = await callbackFn(pointstable)
+    const past = matches.filter(({MatchStatus}) => MatchStatus === 'Post');
+    
+    console.log(past)
+    
     // add the text
     const textEl = widget.addText("Last match")
 } 
 
 // present widget - in app or in widget
 if (widgetFamily === "small") {
-    favouriteTeamWidget()
-} else if (widgetFamily === "medium" && warg === "pt") {
-    pointsTableWidget()
-} else if (widgetFamily === "medium" && warg === "upc") {
-    upcomingMatchWidget()
-} else if (widgetFamily === "medium" && warg === "last") {
-    lastMatchWidget()
+    await favouriteTeamWidget()
+} else if (widgetFamily === "medium" && WARG === "upc") {
+    await upcomingMatchWidget()
+} else if (widgetFamily === "medium" && WARG === "last") {
+    await lastMatchWidget()
 } else {
-    pointsTableWidget()
+    await pointsTableWidget()
 }
 
 if (config.runsInApp) await widget[`present${widgetFamily.split('').map( (c,i)=>(i==0?c.toUpperCase():c)).join('')}`]()
