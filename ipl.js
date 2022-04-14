@@ -1,3 +1,6 @@
+// Variables used by Scriptable.
+// These must be at the very top of the file. Do not edit.
+// icon-color: deep-gray; icon-glyph: calendar-alt;
 /*
 IPL Widget
 By: @abbyjeet
@@ -15,7 +18,7 @@ const ROW_COLOR = Color.blue()
 const BACKGROUND_COLOR = Color.black()
 const url = 'https://ipl-stats-sports-mechanic.s3.ap-south-1.amazonaws.com/ipl/feeds/stats/60-groupstandings.js'
 
-const bgimage = "https://raw.githubusercontent.com/abbyjeet/scriptable-widgets/main/ipl-new.jpg"
+const bgimage = "https://raw.githubusercontent.com/abbyjeet/scriptable-widgets/main/ipl.jpg"
 
 const sc = new Color("#19398a",0.95)
 const ec = new Color("#18184a",0.95)
@@ -24,7 +27,7 @@ const gradC = new LinearGradient()
     gradC.locations = [0,1]
 
 
-//callback function
+//callback function// 
 function ongroupstandings(x){
     return x.points
 }
@@ -54,6 +57,9 @@ const keys = ["TeamLogo", "TeamName","Points","NetRunRate","Performance"]
 
 const widgetFamily = config.widgetFamily ? config.widgetFamily : 'large'
 
+const HEIGHT = 29 // 
+// widgetFamily == "large" ? 29 : 24
+
 const widget = new ListWidget()// 
 // widget.backgroundColor = BACKGROUND_COLOR
 
@@ -75,7 +81,7 @@ for (header of headers) {
   const headerCell = headerStack.addStack()
   headerCell.layoutHorizontally()
 //   headerCell.backgroundColor = HEADER_COLOR
-  headerCell.size = new Size(colWidths[idx],24)
+  headerCell.size = new Size(colWidths[idx],HEIGHT)
   
 //   headerCell.addSpacer(2)
   const textElement = headerCell.addText(headerText)
@@ -93,7 +99,7 @@ widget.addSpacer(1)
 
 // limit the number of rows based on widget size
 
-const rows = data.slice(0, widgetFamily=='large'?10:5)
+const rows = data.slice(0, widgetFamily=='large'?10:4)
 
 for (const row of rows) {
   const rowStack = widget.addStack()
@@ -109,7 +115,7 @@ for (const row of rows) {
       const dataCell = rowStack.addStack() 
         dataCell.layoutHorizontally()
 //     dataCell.backgroundColor = Color.blue()
-    dataCell.size = new Size(colWidths[idx],24)
+    dataCell.size = new Size(colWidths[idx],HEIGHT)
         let imgObj = await new Request(cellText).loadImage()
         let img = dataCell.addImage(imgObj)
     } else {
@@ -117,21 +123,23 @@ for (const row of rows) {
     const dataCell = rowStack.addStack()
     dataCell.layoutHorizontally()
 //     dataCell.backgroundColor = Color.blue()
-    dataCell.size = new Size(colWidths[idx],24)
+    dataCell.size = new Size(colWidths[idx],HEIGHT)
     
     dataCell.addSpacer(1)
     
     let textElement = ""
     if(idx==4){
+//       cellText = "W,W,L,W,L"
       let balls = cellText.replaceAll(",", "").replaceAll("W", "🟢").replaceAll("L", "🔴")
+      balls = [...balls].reverse().join("").substring(0,6)
+// 
+// dataCell.addSpacer(1)
       textElement=dataCell.addText(balls)
       textElement.font = Font.regularSystemFont(7)
 }else{
   textElement=dataCell.addText(cellText)
   textElement.font = font
 }
-
-    
     
     dataCell.centerAlignContent()
     
