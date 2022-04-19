@@ -1,6 +1,9 @@
 // Variables used by Scriptable.
 // These must be at the very top of the file. Do not edit.
 // icon-color: deep-gray; icon-glyph: calendar-alt;
+// Variables used by Scriptable.
+// These must be at the very top of the file. Do not edit.
+// icon-color: deep-gray; icon-glyph: calendar-alt;
 /*
 IPL Widget
 By: @abbyjeet
