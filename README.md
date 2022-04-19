@@ -4,7 +4,7 @@ My personal scriptable widgets for iOS. \
 These widgets need scriptable to be installed on your iphone/ipad \
 Also it requires internet connection through WiFi or Mobile data
 
-<a href="scriptable:///add/https://raw.githubusercontent.com/abbyjeet/scriptable-widgets/main/IPL.js">scriptable:///add/https://raw.githubusercontent.com/abbyjeet/scriptable-widgets/main/IPL.js</a>
+Updated version will be available through this Gist: [IPL.js](https://gist.github.com/abbyjeet/0df876609a7da4feda90190685586d94)
 
 # IPL
 IPL (Indian Premier League) held in India for T20 cricket matches.
