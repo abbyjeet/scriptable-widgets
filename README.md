@@ -13,11 +13,11 @@ This widget displays stats for IPL (2022)
 
 ## Instructions
 1. Make sure you have added this script [ipl.js](https://raw.githubusercontent.com/abbyjeet/scriptable-widgets/main/ipl.js) to Scriptable first
-2. Add a Scriptable widget - small, medium or large (see next section)
+2. Add a Scriptable widget - small, medium or large (see [next section](#types-of-widgets-and-parameters-required))
 3. Hold and press to open the Run Script dialog box \
    <img src="screenshots/edit-menu.png" width="400">
 3. Tap on the field for Script and select the script "IPL"
-4. Depending on the widget you want, specify the parameter (see next section)
+4. Depending on the widget you want, specify the parameter (see [next section](#types-of-widgets-and-parameters-required))
 5. Once everything is set, tap outside the dialog box to close it. The widget should refresh in a moment.
   
 ## Types of widgets and parameters required
@@ -26,33 +26,33 @@ This widget displays stats for IPL (2022)
    <img src="screenshots/edit-menu.png" width="400">
    
    output: \
-   <img src="screenshots/edit-menu.png" width="400">
+   <img src="screenshots/all-teams.png" width="400">
    
 2. Medium widgets
    a. Points table for the top 4 teams (No parameter, default) \
    <img src="screenshots/edit-menu.png" width="400">
    
    output: \
-   <img src="screenshots/edit-menu.png" width="400">
+   <img src="screenshots/top-4.png" width="400">
    
    b. Upcoming match details (Parameter: upc) \
-   <img src="screenshots/edit-menu.png" width="400">
+   <img src="screenshots/upc-param.png" width="400">
    
    output: \
-   <img src="screenshots/edit-menu.png" width="400">
+   <img src="screenshots/upc-match.png" width="400">
    
    c. Last match result (Parameter: last) \
-   <img src="screenshots/edit-menu.png" width="400">
+   <img src="screenshots/last-param.png" width="400">
    
    output: \
-   <img src="screenshots/edit-menu.png" width="400">   
+   <img src="screenshots/last-match.png" width="400">   
    
 3. Small widget
    a. Favourite team's stats (Parameter: Team's Code ex. CSK, MI, RCB, etc. see table below for the codes) \
-   <img src="screenshots/edit-menu.png" width="400">
+   <img src="screenshots/fav-team-param.png" width="400">
    
    output: \
-   <img src="screenshots/edit-menu.png" width="400">   
+   <img src="screenshots/fav-team.png" width="400">   
 
 ### Team Codes
 | Team Code  | Team Name |
