@@ -12,7 +12,7 @@ This widget displays stats for IPL (2022)
  - Favourite team's stats (small widget)
 
 ## Instructions
-1. Make sure you have added this script [ipl.js](ipl.js) to Scriptable first
+1. Make sure you have added this script [ipl.js](https://raw.githubusercontent.com/abbyjeet/scriptable-widgets/main/ipl.js) to Scriptable first
 2. Add a Scriptable widget - small, medium or large (see next section)
 3. Hold and press to open the Run Script dialog box \
    <img src="edit-menu.png" width="400">
